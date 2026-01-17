@@ -54,10 +54,12 @@ add_executable(FastDrop ${SOURCES}
         include/routes.hpp
         include/config.hpp
         include/ai_service.hpp
+        include/session_manager.hpp
         src/code_gen.cpp
         src/routes.cpp
         src/file_storage.cpp
         src/ai_service.cpp
+        src/session_manager.cpp
         ${qrcodegen_SOURCE_DIR}/cpp/qrcodegen.cpp)
 
 target_link_libraries(FastDrop PRIVATE
