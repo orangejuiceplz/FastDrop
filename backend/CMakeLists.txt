@@ -39,6 +39,13 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(dotenv)
 
+FetchContent_Declare(
+        qrcodegen
+        GIT_REPOSITORY https://github.com/nayuki/QR-Code-generator.git
+        GIT_TAG master
+)
+FetchContent_MakeAvailable(qrcodegen)
+
 file(GLOB_RECURSE SOURCES "src/*.cpp")
 
 add_executable(FastDrop ${SOURCES}
@@ -50,7 +57,8 @@ add_executable(FastDrop ${SOURCES}
         src/code_gen.cpp
         src/routes.cpp
         src/file_storage.cpp
-        src/ai_service.cpp)
+        src/ai_service.cpp
+        ${qrcodegen_SOURCE_DIR}/cpp/qrcodegen.cpp)
 
 target_link_libraries(FastDrop PRIVATE
         Crow::Crow
@@ -61,4 +69,5 @@ target_link_libraries(FastDrop PRIVATE
 target_include_directories(FastDrop PRIVATE 
         include
         ${dotenv_SOURCE_DIR}/include
+        ${qrcodegen_SOURCE_DIR}/cpp
 )
