@@ -19,18 +19,18 @@ namespace fastdrop {
     }
 
     std::optional<FileData> FileStorage::get(const std::string& code) {
-        auto it = storage_.find(code);
-        if (it != storage_.end()) {
-            return it->second;
+        auto entry = storage_.find(code);
+        if (entry != storage_.end()) {
+            return entry->second;
         }
         return std::nullopt;
     }
 
     bool FileStorage::remove(const std::string& code) {
-        auto it = storage_.find(code);
-        if (it != storage_.end()) {
-            fs::remove(it->second.filepath);
-            storage_.erase(it);
+        auto entry = storage_.find(code);
+        if (entry != storage_.end()) {
+            fs::remove(entry->second.filepath);
+            storage_.erase(entry);
             return true;
         }
         return false;
@@ -38,12 +38,15 @@ namespace fastdrop {
 
     void FileStorage::cleanup_expired() {
         auto now = std::chrono::steady_clock::now();
-        for (auto it = storage_.begin(); it != storage_.end(); ) {
-            if (!it->second.persistent && it->second.expires_at < now) {
-                fs::remove(it->second.filepath);
-                it = storage_.erase(it);
+        for (auto entry = storage_.begin(); entry != storage_.end(); ) {
+            bool is_expired = entry->second.expires_at < now;
+            bool is_temporary = !entry->second.persistent;
+            
+            if (is_temporary && is_expired) {
+                fs::remove(entry->second.filepath);
+                entry = storage_.erase(entry);
             } else {
-                ++it;
+                ++entry;
             }
         }
     }

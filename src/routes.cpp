@@ -15,30 +15,30 @@ namespace fastdrop {
 
     void register_routes(crow::SimpleApp& app) {
         CROW_ROUTE(app, "/upload").methods("POST"_method)
-        ([](const crow::request& req) {
-            crow::multipart::message msg(req);
+        ([](const crow::request& request) {
+            crow::multipart::message multipart(request);
 
-            for (const auto& part : msg.part_map) {
+            for (const auto& part : multipart.part_map) {
                 if (part.first == "file") {
-                    auto& file_part = part.second;
-                    std::string filename = file_part.get_header_object("Content-Disposition").params.at("filename");
+                    auto& uploaded_file = part.second;
+                    std::string filename = uploaded_file.get_header_object("Content-Disposition").params.at("filename");
 
                     std::string code = genCode();
                     std::string filepath = TEMP_DIR + code + "_" + filename;
 
-                    std::ofstream ofs(filepath, std::ios::binary);
-                    ofs << file_part.body;
-                    ofs.close();
+                    std::ofstream output_file(filepath, std::ios::binary);
+                    output_file << uploaded_file.body;
+                    output_file.close();
 
-                    FileData data{
+                    FileData file_data{
                         filename,
                         filepath,
-                        file_part.body.size(),
+                        uploaded_file.body.size(),
                         std::chrono::steady_clock::now() + std::chrono::seconds(DEFAULT_EXPIRY_SECONDS),
                         false,
                         ""
                     };
-                    FileStorage::instance().store(code, data);
+                    FileStorage::instance().store(code, file_data);
 
                     crow::json::wvalue response;
                     response["code"] = code;
@@ -54,12 +54,12 @@ namespace fastdrop {
         ([](const std::string& code) {
             crow::json::wvalue response;
 
-            auto data = FileStorage::instance().get(code);
-            if (data.has_value()) {
+            auto file_info = FileStorage::instance().get(code);
+            if (file_info.has_value()) {
                 response["found"] = true;
-                response["filename"] = data->filename;
-                response["size"] = std::to_string(data->size / 1024) + "KB";
-                response["ai_summary"] = ""; // placeholder
+                response["filename"] = file_info->filename;
+                response["size"] = std::to_string(file_info->size / 1024) + "KB";
+                response["ai_summary"] = "";
             } else {
                 response["found"] = false;
             }
@@ -68,24 +68,24 @@ namespace fastdrop {
 
         CROW_ROUTE(app, "/retrieve/<string>")
         ([](const std::string& code) {
-            auto data = FileStorage::instance().get(code);
-            if (!data.has_value()) {
+            auto file_info = FileStorage::instance().get(code);
+            if (!file_info.has_value()) {
                 return crow::response(404, "File not found");
             }
 
-            std::ifstream ifs(data->filepath, std::ios::binary);
-            std::string content((std::istreambuf_iterator<char>(ifs)),
-                                std::istreambuf_iterator<char>());
-            ifs.close();
+            std::ifstream input_file(file_info->filepath, std::ios::binary);
+            std::string file_content((std::istreambuf_iterator<char>(input_file)),
+                                     std::istreambuf_iterator<char>());
+            input_file.close();
 
-            std::string filename = data->filename;
+            std::string filename = file_info->filename;
             FileStorage::instance().remove(code);
 
-            crow::response res(200);
-            res.set_header("Content-Type", "application/octet-stream");
-            res.set_header("Content-Disposition", "attachment; filename=\"" + filename + "\"");
-            res.body = content;
-            return res;
+            crow::response download_response(200);
+            download_response.set_header("Content-Type", "application/octet-stream");
+            download_response.set_header("Content-Disposition", "attachment; filename=\"" + filename + "\"");
+            download_response.body = file_content;
+            return download_response;
         });
 
         CROW_ROUTE(app, "/")
