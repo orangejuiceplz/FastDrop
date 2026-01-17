@@ -42,7 +42,7 @@ int main() {
 
     auto& cors = app.get_middleware<crow::CORSHandler>();
     cors.global()
-        .origin("http://localhost:5173")
+        .origin("*")
         .methods("GET"_method, "POST"_method, "OPTIONS"_method)
         .headers("Content-Type");
 

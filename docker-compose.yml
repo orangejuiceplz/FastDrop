@@ -1,0 +1,16 @@
+services:
+  fastdrop-backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "1337:1337"
+    environment:
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - PORT=1337
+    volumes:
+      - fastdrop-uploads:/app/uploads
+    restart: unless-stopped
+
+volumes:
+  fastdrop-uploads:
