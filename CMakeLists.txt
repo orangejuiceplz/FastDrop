@@ -33,7 +33,14 @@ FetchContent_MakeAvailable(cpr)
 
 file(GLOB_RECURSE SOURCES "src/*.cpp")
 
-add_executable(FastDrop ${SOURCES})
+add_executable(FastDrop ${SOURCES}
+        include/file_storage.hpp
+        include/code_gen.hpp
+        include/routes.hpp
+        include/config.hpp
+        src/code_gen.cpp
+        src/routes.cpp
+        src/file_storage.cpp)
 
 target_link_libraries(FastDrop PRIVATE
         Crow::Crow
