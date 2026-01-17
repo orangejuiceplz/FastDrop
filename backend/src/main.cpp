@@ -33,8 +33,8 @@ int main() {
 
     fastdrop::register_routes(app);
 
-    std::cout << " FastDrop running on http:localhost:5173" << std::endl;
-    app.port(5173).multithreaded().run();
+    std::cout << " FastDrop running on http:localhost:8080" << std::endl;
+    app.port(8080).multithreaded().run();
 
     running = false;
     cleaner.join();
