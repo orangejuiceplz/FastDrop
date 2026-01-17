@@ -13,7 +13,7 @@ namespace fs = std::filesystem;
 
 namespace fastdrop {
 
-    void register_routes(crow::SimpleApp& app) {
+    void register_routes(crow::App<crow::CORSHandler>& app) {
         CROW_ROUTE(app, "/upload").methods("POST"_method)
         ([](const crow::request& request) {
             crow::multipart::message multipart(request);

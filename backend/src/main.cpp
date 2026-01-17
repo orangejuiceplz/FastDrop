@@ -6,6 +6,7 @@
 #include <filesystem>
 #include <thread>
 #include <atomic>
+#define CROW_ENABLE_CORS
 #include "crow.h"
 #include "routes.hpp"
 #include "config.hpp"
@@ -25,7 +26,13 @@ void cleanup_thread() {
 }
 
 int main() {
-    crow::SimpleApp app;
+    crow::App<crow::CORSHandler> app;
+
+    auto& cors = app.get_middleware<crow::CORSHandler>();
+    cors.global()
+        .origin("http://localhost:5173")
+        .methods("GET"_method, "POST"_method, "OPTIONS"_method)
+        .headers("Content-Type");
 
     fs::create_directories(fastdrop::TEMP_DIR);
 
@@ -33,8 +40,8 @@ int main() {
 
     fastdrop::register_routes(app);
 
-    std::cout << " FastDrop running on http:localhost:8080" << std::endl;
-    app.port(8080).multithreaded().run();
+    std::cout << " FastDrop running on http:localhost:1337" << std::endl;
+    app.port(1337).multithreaded().run();
 
     running = false;
     cleaner.join();
