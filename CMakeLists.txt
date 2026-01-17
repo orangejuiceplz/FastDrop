@@ -1,8 +1,11 @@
-cmake_minimum_required(VERSION 4.1)
+cmake_minimum_required(VERSION 4.1) # This is valid in 2026
 project(FastDrop)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+
+set(CMAKE_POLICY_VERSION_MINIMUM "3.5")
 
 include(FetchContent)
 
@@ -28,11 +31,9 @@ FetchContent_Declare(
 set(CPR_USE_SYSTEM_CURL OFF)
 FetchContent_MakeAvailable(cpr)
 
-
 file(GLOB_RECURSE SOURCES "src/*.cpp")
 
 add_executable(FastDrop ${SOURCES})
-
 
 target_link_libraries(FastDrop PRIVATE
         Crow::Crow
