@@ -1,3 +1,5 @@
+
+
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -13,9 +15,6 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-body {
-  padding:0;
-}
 a {
   font-weight: 500;
   color: #646cff;
