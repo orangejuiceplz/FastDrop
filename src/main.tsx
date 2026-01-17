@@ -2,8 +2,8 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Welcome from './pages/Welcome.tsx';
-import './index.css'
-import App from './pages/Share.tsx'
+import App from './pages/Share.tsx';
+import './css/index.css';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

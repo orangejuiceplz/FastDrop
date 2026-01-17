@@ -1,0 +1,31 @@
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    background-color: #01161E;
+    width: 100% auto;
+    box-shadow: 0 2px 20px rgba(1, 22, 30, 0.75);
+    border-radius: 25px;
+    margin: 20px;
+}
+
+.navbar-container {
+    max-width: 100%;
+    margin: 10px auto;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    height: 30px;
+    gap: 15px;
+}
+
+.navbar-link {
+    display: flex;
+    align-items: center;
+    color: #BEE3DB
+}
+
+.navbar-link:hover {
+    color: #FFFFFF; 
+}
