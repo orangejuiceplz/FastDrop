@@ -7,6 +7,7 @@
 #include "code_gen.hpp"
 #include "config.hpp"
 #include "ai_service.hpp"
+#include "qr_service.hpp"
 #include <fstream>
 #include <filesystem>
 
@@ -87,7 +88,7 @@ namespace fastdrop {
                         response["code"] = code;
                         response["expires_in"] = DEFAULT_EXPIRY_SECONDS;
                         response["locked"] = !password.empty();
-                        response["qr_url"] = "https://api.qrserver.com/v1/create-qr-code/?data=" + code;
+                        response["qr_url"] = "/qr/" + code;
                         return crow::response(200, response);
                     }
                 }
@@ -203,6 +204,16 @@ namespace fastdrop {
         CROW_ROUTE(app, "/health")
         ([]() {
             return "OK";
+        });
+
+        CROW_ROUTE(app, "/qr/<string>")
+        ([](const std::string& code) {
+            std::string svg = generate_qr_svg(code);
+            
+            crow::response qr_response(200);
+            qr_response.set_header("Content-Type", "image/svg+xml");
+            qr_response.body = svg;
+            return qr_response;
         });
     }
 
