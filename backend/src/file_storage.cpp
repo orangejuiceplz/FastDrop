@@ -51,4 +51,15 @@ namespace fastdrop {
         }
     }
 
+    bool FileStorage::verify_key(const std::string& code, const std::string& password) {
+        auto entry = storage_.find(code);
+        if (entry == storage_.end()) {
+            return false;
+        }
+        if (!entry->second.is_locked()) {
+            return true;
+        }
+        return entry->second.key_hash == hash_password(password);
+    }
+
 }

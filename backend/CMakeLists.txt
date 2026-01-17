@@ -13,6 +13,7 @@ FetchContent_Declare(
         crow
         GIT_REPOSITORY https://github.com/CrowCpp/Crow.git
         GIT_TAG master
+
 )
 FetchContent_MakeAvailable(crow)
 
@@ -31,6 +32,13 @@ FetchContent_Declare(
 set(CPR_USE_SYSTEM_CURL OFF)
 FetchContent_MakeAvailable(cpr)
 
+FetchContent_Declare(
+        dotenv
+        GIT_REPOSITORY https://github.com/laserpants/dotenv-cpp.git
+        GIT_TAG master
+)
+FetchContent_MakeAvailable(dotenv)
+
 file(GLOB_RECURSE SOURCES "src/*.cpp")
 
 add_executable(FastDrop ${SOURCES}
@@ -38,9 +46,11 @@ add_executable(FastDrop ${SOURCES}
         include/code_gen.hpp
         include/routes.hpp
         include/config.hpp
+        include/ai_service.hpp
         src/code_gen.cpp
         src/routes.cpp
-        src/file_storage.cpp)
+        src/file_storage.cpp
+        src/ai_service.cpp)
 
 target_link_libraries(FastDrop PRIVATE
         Crow::Crow
@@ -48,4 +58,7 @@ target_link_libraries(FastDrop PRIVATE
         cpr::cpr
 )
 
-target_include_directories(FastDrop PRIVATE include)
+target_include_directories(FastDrop PRIVATE 
+        include
+        ${dotenv_SOURCE_DIR}/include
+)
