@@ -2,7 +2,7 @@ import '../css/Share.css'
 import Navbar from '../components/navbar.tsx';
 import { useState } from 'react';
 
-const API_URL = 'http://localhost:1337';
+const API_URL = 'https://prepractical-angelia-breathlessly.ngrok-free.dev'
 
 function Share() {
   const [mode, setMode] = useState<'select' | 'upload' | 'receive'>('select');

@@ -2,9 +2,8 @@ import '../css/Connect.css';
 import Navbar from '../components/navbar.tsx';
 import { useState, useEffect, useRef } from 'react';
 
-const API_URL = 'http://localhost:1337';
-const WS_URL = 'ws://localhost:1337';
-
+const API_URL = 'https://prepractical-angelia-breathlessly.ngrok-free.dev';
+const WS_URL = 'wss://https://prepractical-angelia-breathlessly.ngrok-free.dev';
 interface SharedFile {
     code: string;
     filename: string;
