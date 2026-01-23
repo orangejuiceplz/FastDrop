@@ -3,7 +3,7 @@ import Navbar from '../components/navbar.tsx';
 import { useState, useEffect, useRef } from 'react';
 
 const API_URL = 'https://prepractical-angelia-breathlessly.ngrok-free.dev';
-const WS_URL = 'wss://https://prepractical-angelia-breathlessly.ngrok-free.dev';
+const WS_URL = 'wss://prepractical-angelia-breathlessly.ngrok-free.dev';
 interface SharedFile {
     code: string;
     filename: string;

@@ -7,7 +7,7 @@ export default function Navbar() {
         <nav className="navbar">
             <div className="navbar-container">
                 <Link to="/" className="navbar-link">Home</Link>
-                <Link to="/app" className="navbar-link">Share</Link>
+                {/*<Link to="/share" className="navbar-link">Share</Link>*/}
                 <Link to="/connect" className="navbar-link">Connect</Link>
             </div>
         </nav>
